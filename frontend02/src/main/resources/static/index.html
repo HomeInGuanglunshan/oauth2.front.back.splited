@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>Subsystem</title>
+<meta charset="utf-8">
+<script src="https://cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+</head>
+<body>
+<p id="principal"></p>
+<input id="logout" type="button" value="logout">
+</body>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$.ajax({
+			url: 'http://subsystem.com:8082/userInfo',
+			type: 'post',
+			dataType: 'json',
+			xhrFields:{
+				withCredentials:true
+			},
+			success: function(result){
+				$("#principal").append(JSON.stringify(result));
+				if (result && result.status == 401) {
+					$("#principal").after("<p><a href=\"/login.html\">go to login page</a></p>");
+				}
+			}
+		})
+		
+		$("#logout").click(function(){
+			$.ajax({
+				url: 'http://subsystem.com:8082/logout',
+				xhrFields:{
+					withCredentials:true
+				},
+				success: function(result){
+					console.log(result);
+					window.location.reload();
+				}
+			})
+		})
+	});
+</script>
+</html>

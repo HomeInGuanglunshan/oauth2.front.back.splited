@@ -1,0 +1,65 @@
+server:
+  port: 8082
+  servlet:
+    session:
+      timeout: 1800
+      cookie:
+        name: backend02
+
+spring:
+  session:
+    store-type: redis
+    redis:
+      namespace: oauth2_front_back_splited
+      #flush-mode: on_save
+  redis:
+    host: localhost
+    port: 6379
+    timeout: 10000
+    database: 0
+    password:
+    lettuce:
+      pool:
+        max-active: 300
+        max-idle: 100
+        max-wait: -1
+        min-idle: 20
+      shutdown-timeout: 10000
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/shiro_demo?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: 1234
+    initialSize: 3 
+    minIdle: 2
+    maxActive: 60
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: SELECT 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    removeAbandoned: true
+    removeAbandonedTimeout: 120
+    logAbandoned: false
+    filters: stat
+
+security:
+  oauth2:
+    client:
+      client-id: subsystem
+      client-secret: 8082
+      access-token-uri: http://portal.com:8081/oauth/token
+      user-authorization-uri: http://portal.com:8081/oauth/authorize
+      #tokenName: access_token
+      #authenticationScheme: query
+      #clientAuthenticationScheme: form
+    resource:
+      jwt:
+        key-value: oauth2.front.back.splited
+        #key-uri: http://portal.com:8081/oauth/token_key
+      user-info-uri: http://portal.com:8081/user
+      #token-info-uri: http://portal.com:8081/oauth/check_token

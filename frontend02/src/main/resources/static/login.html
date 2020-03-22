@@ -1,0 +1,70 @@
+<html>
+<head>
+<title>Subsystem Login Page</title>
+<meta charset="utf-8">
+<script src="https://cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+</head>
+<body onload="document.f.username.focus();">
+	<h3>Login with Username and Password</h3>
+	<form name="f" id="form">
+		<table>
+			<tbody>
+				<tr>
+					<td>User:</td>
+					<td><input id="username" name="username" type="text" value=""></td>
+				</tr>
+				<tr>
+					<td>Password:</td>
+					<td><input id="password" name="password" type="password"></td>
+				</tr>
+				<tr>
+					<!-- <td colspan="2"><input id="login" type="submit" -->
+						<!-- value="login"></td> -->
+					<!-- type="submit"对 ajax 造成干扰 -->
+					<!-- https://blog.csdn.net/AnPHPer/article/details/78303669 -->
+					<td colspan="2"><input id="login" type="button" value="login"></td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</body>
+<script>
+	$(document).ready(function(){
+		//回车事件绑定
+		document.onkeydown=function(event){
+			var e = event || window.event || arguments.callee.caller.arguments[0];
+			if(e && e.keyCode==13){ 
+				$('#login').click();
+			}
+		}; 
+	
+		$("#login").click(function(){
+			var username = $('#username').val();
+			var password = $('#password').val();
+			var data = { username:username, password:password };
+			$.ajax({
+				url: 'http://subsystem.com:8082/login',
+				data: data,
+				type: 'post',
+				dataType: 'json',
+				// refer to: https://www.cnblogs.com/helloyy/p/6109665.html
+// 				crossDomain: true,
+// 				beforeSend: function(xhr){
+// 					xhr.withCredentials = true;
+// 				},
+				// refer to: https://segmentfault.com/q/1010000004131293
+				// 上面的“beforeSend...”不行，有可能是版本问题
+				xhrFields:{
+					withCredentials:true
+				},
+				success: function(result){
+					console.log(result);
+					if (result && result.status == 200) {
+						window.location.href="/index.html";
+					}
+				}
+			})
+		})
+	})
+</script>
+</html>
